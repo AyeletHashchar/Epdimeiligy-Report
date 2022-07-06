@@ -1,42 +1,58 @@
-function getRandom(){
-    return new Promise((resolve, reject)=>{
-        setTimeout(()=>{
-            resolve(Math.floor(Math.random() * 10) + 1);
-        },3000)
-    })
-
+////1
+function getRandom() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(Math.floor(Math.random() * 10) + 1);
+    }, 3000);
+  });
 }
 
 getRandom()
-.then(result => alert("getRandom: " + result))
-.catch((err)=>{console.error(err)});
+  .then((result) => alert("getRandom: " + result))
+  .catch((err) => {
+    console.error(err);
+  });
 
-function makeAllCups(words){
-    let newArr = [];
-    return new Promise((resolve, reject)=>{
-        words?.forEach(word => {
-            newArr.push(word.toUpperCase());
+////2
+
+function makeAllCups(words) {
+  let newArr = [];
+  return new Promise((resolve, reject) => {
+    words?.forEach((word) => {
+      if (!newArr.every(isString)) {
+        reject("ERR: Unvalid Input. " + word + " is not a string.");
+      }
+      newArr.push(word.toUpperCase());
+    });
+    if (newArr.length > 0) {
+      sortWords(newArr)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
         });
-        if(newArr.length > 0){
-            sortWords(newArr)
-            .then((res)=>{resolve(res)})
-            .catch((err)=>{reject(err)});
-        }
-        else reject("ERR: Translation failed. Possibly reason: no input")
-    })
+    } else reject("ERR: Translation failed. Possibly reason: no input");
+  });
 }
 
-function sortWords(words){
-    let newArr = words;
-    return new Promise((resolve, reject)=>{
-        if(newArr.includes(1)){
-            reject("ERR: Unvalid Input. " + word + " is not a string.")
-        }
-        newArr.sort();
-        resolve(newArr);
-    })
+const isString = (curValue) => typeof curValue == "string";
+
+function sortWords(words) {
+  let newArr = words;
+  return new Promise((resolve, reject) => {
+    if (!newArr.every(isString)) {
+      reject("ERR: Unvalid Input. " + word + " is not a string.");
+    }
+    newArr.sort();
+    resolve(newArr);
+  });
 }
 
 makeAllCups(["aaa", "ccc", "bBb"])
-.then((resolve)=>{alert(resolve)})
-.catch((err)=>{console.error(err)});
+  .then((resolve) => {
+    alert(resolve);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
